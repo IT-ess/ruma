@@ -1,6 +1,7 @@
 use js_int::UInt;
 use ruma_common::OwnedMxcUri;
 use serde::{Deserialize, Serialize};
+use ts_rs::TS;
 
 use super::FormattedBody;
 use crate::room::{
@@ -9,7 +10,7 @@ use crate::room::{
 };
 
 /// The payload for a file message.
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, TS)]
 #[cfg_attr(not(ruma_unstable_exhaustive_types), non_exhaustive)]
 pub struct FileMessageEventContent {
     /// A human-readable description of the file.
@@ -22,6 +23,8 @@ pub struct FileMessageEventContent {
     ///
     /// This should only be set if the body represents a caption.
     #[serde(flatten)]
+    // We skip TS type generation for now since it cannot reconcile the two "bodies".
+    #[ts(skip)]
     pub formatted: Option<FormattedBody>,
 
     /// The original filename of the uploaded file as deserialized from the event.
@@ -91,7 +94,7 @@ impl FileMessageEventContent {
 }
 
 /// Metadata about a file.
-#[derive(Clone, Debug, Default, Deserialize, Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, Serialize, TS)]
 #[cfg_attr(not(ruma_unstable_exhaustive_types), non_exhaustive)]
 pub struct FileInfo {
     /// The mimetype of the file, e.g. "application/msword".
@@ -100,18 +103,20 @@ pub struct FileInfo {
 
     /// The size of the file in bytes.
     #[serde(skip_serializing_if = "Option::is_none")]
+    #[ts(type = "number | null")]
     pub size: Option<UInt>,
 
     /// Metadata about the image referred to in `thumbnail_source`.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub thumbnail_info: Option<Box<ThumbnailInfo>>,
 
-    /// The source of the thumbnail of the file.
+    /// The source of the thumbnail of the file. TODO: fix ts(skip)
     #[serde(
         flatten,
         with = "crate::room::thumbnail_source_serde",
         skip_serializing_if = "Option::is_none"
     )]
+    #[ts(skip)]
     pub thumbnail_source: Option<MediaSource>,
 }
 

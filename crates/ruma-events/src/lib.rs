@@ -108,6 +108,7 @@ use std::{collections::BTreeSet, fmt};
 
 use ruma_common::{EventEncryptionAlgorithm, OwnedUserId, room_version_rules::RedactionRules};
 use serde::{Deserialize, Serialize, Serializer, de::IgnoredAny};
+use ts_rs::TS;
 
 // Needs to be public for trybuild tests
 #[doc(hidden)]
@@ -261,7 +262,7 @@ pub fn serialize_custom_event_error<T, S: Serializer>(_: &T, _: S) -> Result<S::
 }
 
 /// Describes whether the event mentions other users or the room.
-#[derive(Clone, Debug, Default, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Serialize, Deserialize, TS)]
 #[non_exhaustive]
 pub struct Mentions {
     /// The list of mentioned users.

@@ -3,6 +3,7 @@ use std::time::Duration;
 use js_int::UInt;
 use ruma_common::OwnedMxcUri;
 use serde::{Deserialize, Serialize};
+use ts_rs::TS;
 
 use super::FormattedBody;
 use crate::room::{
@@ -11,7 +12,7 @@ use crate::room::{
 };
 
 /// The payload for an audio message.
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, TS)]
 #[cfg_attr(not(ruma_unstable_exhaustive_types), non_exhaustive)]
 pub struct AudioMessageEventContent {
     /// The textual representation of this message.
@@ -23,6 +24,8 @@ pub struct AudioMessageEventContent {
     /// Formatted form of the message `body`.
     ///
     /// This should only be set if the body represents a caption.
+    // We skip TS type generation for now since it cannot reconcile the two "bodies".
+    #[ts(skip)]
     #[serde(flatten)]
     pub formatted: Option<FormattedBody>,
 
@@ -119,7 +122,7 @@ impl AudioMessageEventContent {
 }
 
 /// Metadata about an audio clip.
-#[derive(Clone, Debug, Default, Deserialize, Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, Serialize, TS)]
 #[cfg_attr(not(ruma_unstable_exhaustive_types), non_exhaustive)]
 pub struct AudioInfo {
     /// The duration of the audio in milliseconds.
@@ -128,6 +131,7 @@ pub struct AudioInfo {
         default,
         skip_serializing_if = "Option::is_none"
     )]
+    #[ts(type = "number | null")]
     pub duration: Option<Duration>,
 
     /// The mimetype of the audio, e.g. "audio/aac".
@@ -136,6 +140,7 @@ pub struct AudioInfo {
 
     /// The size of the audio clip in bytes.
     #[serde(skip_serializing_if = "Option::is_none")]
+    #[ts(type = "number | null")]
     pub size: Option<UInt>,
 }
 
@@ -151,7 +156,7 @@ impl AudioInfo {
 ///
 /// [msc]: https://github.com/matrix-org/matrix-spec-proposals/blob/83f6c5b469c1d78f714e335dcaa25354b255ffa5/proposals/3245-voice-messages.md
 #[cfg(feature = "unstable-msc3245-v1-compat")]
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, TS)]
 #[cfg_attr(not(ruma_unstable_exhaustive_types), non_exhaustive)]
 pub struct UnstableAudioDetailsContentBlock {
     /// The duration of the audio in milliseconds.
@@ -159,6 +164,7 @@ pub struct UnstableAudioDetailsContentBlock {
     /// Note that the MSC says this should be in seconds but for compatibility with the Element
     /// clients, this uses milliseconds.
     #[serde(with = "ruma_common::serde::duration::ms")]
+    #[ts(type = "number")]
     pub duration: Duration,
 
     /// The waveform representation of the audio content, if any.
@@ -181,7 +187,7 @@ impl UnstableAudioDetailsContentBlock {
 ///
 /// [msc]: https://github.com/matrix-org/matrix-spec-proposals/blob/83f6c5b469c1d78f714e335dcaa25354b255ffa5/proposals/3245-voice-messages.md
 #[cfg(feature = "unstable-msc3245-v1-compat")]
-#[derive(Clone, Debug, Default, Deserialize, Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, Serialize, TS)]
 #[cfg_attr(not(ruma_unstable_exhaustive_types), non_exhaustive)]
 pub struct UnstableVoiceContentBlock {}
 
@@ -197,7 +203,8 @@ impl UnstableVoiceContentBlock {
 ///
 /// Must be an integer between 0 and 1024.
 #[cfg(feature = "unstable-msc3245-v1-compat")]
-#[derive(Clone, Copy, Debug, Default, Hash, PartialEq, Eq, PartialOrd, Ord, Serialize)]
+#[derive(Clone, Copy, Debug, Default, Hash, PartialEq, Eq, PartialOrd, Ord, Serialize, TS)]
+#[ts(type = "number")]
 pub struct UnstableAmplitude(UInt);
 
 #[cfg(feature = "unstable-msc3245-v1-compat")]

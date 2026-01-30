@@ -1,18 +1,21 @@
 use serde::{Deserialize, Serialize};
+use ts_rs::TS;
 
 use super::FormattedBody;
 #[cfg(feature = "unstable-msc4095")]
 use super::url_preview::UrlPreview;
 
 /// The payload for a text message.
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, TS)]
 #[cfg_attr(not(ruma_unstable_exhaustive_types), non_exhaustive)]
 pub struct TextMessageEventContent {
     /// The body of the message.
     pub body: String,
 
-    /// Formatted form of the message `body`.
+    // We skip TS type generation for now since it cannot reconcile the two "bodies".
+    #[ts(skip)]
     #[serde(flatten)]
+    /// Formatted form of the message `body`.
     pub formatted: Option<FormattedBody>,
 
     /// [MSC4095](https://github.com/matrix-org/matrix-spec-proposals/pull/4095)-style bundled url previews

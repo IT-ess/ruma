@@ -1940,6 +1940,7 @@ dependencies = [
  "time",
  "tracing",
  "trybuild",
+ "ts-rs",
  "url",
  "uuid",
  "web-time",
@@ -1973,6 +1974,7 @@ dependencies = [
  "thiserror",
  "tracing",
  "trybuild",
+ "ts-rs",
  "url",
  "web-time",
  "wildmatch",
@@ -2046,6 +2048,7 @@ dependencies = [
  "serde",
  "syn",
  "toml",
+ "ts-rs",
 ]
 
 [[package]]
@@ -2855,6 +2858,28 @@ dependencies = [
  "target-triple",
  "termcolor",
  "toml",
+]
+
+[[package]]
+name = "ts-rs"
+version = "11.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4994acea2522cd2b3b85c1d9529a55991e3ad5e25cdcd3de9d505972c4379424"
+dependencies = [
+ "thiserror",
+ "ts-rs-macros",
+]
+
+[[package]]
+name = "ts-rs-macros"
+version = "11.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ee6ff59666c9cbaec3533964505d39154dc4e0a56151fdea30a09ed0301f62e2"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
+ "termcolor",
 ]
 
 [[package]]

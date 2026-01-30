@@ -1,5 +1,6 @@
 use ruma_common::OwnedMxcUri;
 use serde::{Deserialize, Serialize};
+use ts_rs::TS;
 
 use super::FormattedBody;
 use crate::room::{
@@ -8,7 +9,7 @@ use crate::room::{
 };
 
 /// The payload for an image message.
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, TS)]
 #[cfg_attr(not(ruma_unstable_exhaustive_types), non_exhaustive)]
 pub struct ImageMessageEventContent {
     /// A textual representation of the image.
@@ -21,6 +22,8 @@ pub struct ImageMessageEventContent {
     ///
     /// This should only be set if the body represents a caption.
     #[serde(flatten)]
+    // We skip TS type generation for now since it cannot reconcile the two "bodies".
+    #[ts(skip)]
     pub formatted: Option<FormattedBody>,
 
     /// The original filename of the uploaded file as deserialized from the event.

@@ -1,4 +1,5 @@
 use serde::Serialize;
+use ts_rs::TS;
 
 use super::{
     AddMentions, ForwardThread, MessageType, Relation, ReplacementMetadata, ReplyMetadata,
@@ -10,8 +11,9 @@ use crate::{
 };
 
 /// Form of [`RoomMessageEventContent`] without relation.
-#[derive(Clone, Debug, Serialize)]
+#[derive(Clone, Debug, Serialize, TS)]
 #[cfg_attr(not(ruma_unstable_exhaustive_types), non_exhaustive)]
+#[ts(export)]
 pub struct RoomMessageEventContentWithoutRelation {
     /// A key which identifies the type of message being sent.
     ///

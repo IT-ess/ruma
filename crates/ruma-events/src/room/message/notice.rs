@@ -1,16 +1,19 @@
 use serde::{Deserialize, Serialize};
+use ts_rs::TS;
 
 use super::FormattedBody;
 
 /// The payload for a notice message.
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, TS)]
 #[cfg_attr(not(ruma_unstable_exhaustive_types), non_exhaustive)]
+#[ts(export)]
 pub struct NoticeMessageEventContent {
     /// The notice text.
     pub body: String,
 
     /// Formatted form of the message `body`.
     #[serde(flatten)]
+    #[ts(skip)]
     pub formatted: Option<FormattedBody>,
 }
 

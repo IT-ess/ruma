@@ -15,6 +15,7 @@ use ruma_macros::EventContent;
 use serde::{Deserialize, Serialize, de::DeserializeOwned};
 use serde_json::Value as JsonValue;
 use tracing::warn;
+use ts_rs::TS;
 
 #[cfg(feature = "html")]
 use self::sanitize::remove_plain_reply_fallback;
@@ -73,9 +74,10 @@ pub use self::{
 /// This event is used when sending messages in a room.
 ///
 /// Messages are not limited to be text.
-#[derive(Clone, Debug, Serialize, EventContent)]
+#[derive(Clone, Debug, Serialize, EventContent, TS)]
 #[cfg_attr(not(ruma_unstable_exhaustive_types), non_exhaustive)]
 #[ruma_event(type = "m.room.message", kind = MessageLike)]
+#[ts(export)]
 pub struct RoomMessageEventContent {
     /// A key which identifies the type of message being sent.
     ///
@@ -87,6 +89,7 @@ pub struct RoomMessageEventContent {
     ///
     /// [related messages]: https://spec.matrix.org/latest/client-server-api/#forming-relationships-between-events
     #[serde(flatten, skip_serializing_if = "Option::is_none")]
+    #[ts(skip)] // We need to modify the type manually for this one
     pub relates_to: Option<Relation<RoomMessageEventContentWithoutRelation>>,
 
     /// The [mentions] of this event.
@@ -351,7 +354,7 @@ pub enum ReplyWithinThread {
 }
 
 /// The content that is specific to each message type variant.
-#[derive(Clone, Debug, Serialize)]
+#[derive(Clone, Debug, Serialize, TS)]
 #[serde(tag = "msgtype")]
 #[cfg_attr(not(ruma_unstable_exhaustive_types), non_exhaustive)]
 pub enum MessageType {
@@ -370,6 +373,7 @@ pub enum MessageType {
     /// A media gallery message.
     #[cfg(feature = "unstable-msc4274")]
     #[serde(rename = "dm.filament.gallery")]
+    #[ts(skip)] // Not supported by frontend for now
     Gallery(GalleryMessageEventContent),
 
     /// An image message.
@@ -378,14 +382,17 @@ pub enum MessageType {
 
     /// A location message.
     #[serde(rename = "m.location")]
+    #[ts(skip)] // Not supported by frontend for now
     Location(LocationMessageEventContent),
 
     /// A notice message.
     #[serde(rename = "m.notice")]
+    #[ts(skip)] // Not supported by frontend for now
     Notice(NoticeMessageEventContent),
 
     /// A server notice message.
     #[serde(rename = "m.server_notice")]
+    #[ts(skip)] // Not supported by frontend for now
     ServerNotice(ServerNoticeMessageEventContent),
 
     /// A text message.
@@ -398,11 +405,13 @@ pub enum MessageType {
 
     /// A request to initiate a key verification.
     #[serde(rename = "m.key.verification.request")]
+    #[ts(skip)] // Not supported by frontend for now
     VerificationRequest(KeyVerificationRequestEventContent),
 
     /// A custom message.
     #[doc(hidden)]
     #[serde(untagged)]
+    #[ts(skip)] // Not supported by frontend for now
     _Custom(CustomEventContent),
 }
 
@@ -719,7 +728,7 @@ impl<'a> From<&'a OriginalSyncRoomMessageEvent> for ReplyMetadata<'a> {
 
 /// The format for the formatted representation of a message body.
 #[doc = include_str!(concat!(env!("CARGO_MANIFEST_DIR"), "/src/doc/string_enum.md"))]
-#[derive(Clone, StringEnum)]
+#[derive(Clone, StringEnum, TS)]
 #[non_exhaustive]
 pub enum MessageFormat {
     /// HTML.
@@ -727,12 +736,13 @@ pub enum MessageFormat {
     Html,
 
     #[doc(hidden)]
+    #[ts(skip)]
     _Custom(PrivOwnedStr),
 }
 
 /// Common message event content fields for message types that have separate plain-text and
 /// formatted representations.
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, TS)]
 #[allow(clippy::exhaustive_structs)]
 pub struct FormattedBody {
     /// The format used in the `formatted_body`.

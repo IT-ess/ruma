@@ -10,6 +10,7 @@ use ruma_common::{
     serde::{Base64, base64::UrlSafe},
 };
 use serde::{Deserialize, Serialize, de};
+use ts_rs::TS;
 use zeroize::Zeroize;
 
 pub mod aliases;
@@ -36,8 +37,9 @@ pub mod tombstone;
 pub mod topic;
 
 /// The source of a media file.
-#[derive(Clone, Debug, Serialize)]
+#[derive(Clone, Debug, Serialize, TS)]
 #[allow(clippy::exhaustive_enums)]
+#[ts(export)]
 pub enum MediaSource {
     /// The MXC URI to the unencrypted media file.
     #[serde(rename = "url")]
@@ -73,15 +75,17 @@ impl<'de> Deserialize<'de> for MediaSource {
 }
 
 /// Metadata about an image.
-#[derive(Clone, Debug, Default, Deserialize, Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, Serialize, TS)]
 #[cfg_attr(not(ruma_unstable_exhaustive_types), non_exhaustive)]
 pub struct ImageInfo {
     /// The height of the image in pixels.
     #[serde(rename = "h", skip_serializing_if = "Option::is_none")]
+    #[ts(type = "number | null")]
     pub height: Option<UInt>,
 
     /// The width of the image in pixels.
     #[serde(rename = "w", skip_serializing_if = "Option::is_none")]
+    #[ts(type = "number | null")]
     pub width: Option<UInt>,
 
     /// The MIME type of the image, e.g. "image/png."
@@ -90,14 +94,16 @@ pub struct ImageInfo {
 
     /// The file size of the image in bytes.
     #[serde(skip_serializing_if = "Option::is_none")]
+    #[ts(type = "number | null")]
     pub size: Option<UInt>,
 
     /// Metadata about the image referred to in `thumbnail_source`.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub thumbnail_info: Option<Box<ThumbnailInfo>>,
 
-    /// The source of the thumbnail of the image.
+    /// The source of the thumbnail of the image. TODO: Fix the skiped TS
     #[serde(flatten, with = "thumbnail_source_serde", skip_serializing_if = "Option::is_none")]
+    #[ts(skip)]
     pub thumbnail_source: Option<MediaSource>,
 
     /// The [BlurHash](https://blurha.sh) for this image.
@@ -114,6 +120,7 @@ pub struct ImageInfo {
     /// [MSC2448](https://github.com/matrix-org/matrix-spec-proposals/pull/2448).
     #[cfg(feature = "unstable-msc2448")]
     #[serde(rename = "xyz.amorgan.thumbhash", skip_serializing_if = "Option::is_none")]
+    #[ts(type = "string | null")]
     pub thumbhash: Option<Base64>,
 
     /// Whether the image is animated.
@@ -134,15 +141,17 @@ impl ImageInfo {
 }
 
 /// Metadata about a thumbnail.
-#[derive(Clone, Debug, Default, Deserialize, Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, Serialize, TS)]
 #[cfg_attr(not(ruma_unstable_exhaustive_types), non_exhaustive)]
 pub struct ThumbnailInfo {
     /// The height of the thumbnail in pixels.
     #[serde(rename = "h", skip_serializing_if = "Option::is_none")]
+    #[ts(type = "number | null")]
     pub height: Option<UInt>,
 
     /// The width of the thumbnail in pixels.
     #[serde(rename = "w", skip_serializing_if = "Option::is_none")]
+    #[ts(type = "number | null")]
     pub width: Option<UInt>,
 
     /// The MIME type of the thumbnail, e.g. "image/png."
@@ -151,6 +160,7 @@ pub struct ThumbnailInfo {
 
     /// The file size of the thumbnail in bytes.
     #[serde(skip_serializing_if = "Option::is_none")]
+    #[ts(type = "number | null")]
     pub size: Option<UInt>,
 }
 
@@ -165,7 +175,7 @@ impl ThumbnailInfo {
 ///
 /// To create an instance of this type, first create a `EncryptedFileInit` and convert it via
 /// `EncryptedFile::from` / `.into()`.
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, TS)]
 #[cfg_attr(not(ruma_unstable_exhaustive_types), non_exhaustive)]
 pub struct EncryptedFile {
     /// The URL to the file.
@@ -175,11 +185,13 @@ pub struct EncryptedFile {
     pub key: JsonWebKey,
 
     /// The 128-bit unique counter block used by AES-CTR, encoded as unpadded base64.
+    #[ts(type = "string")]
     pub iv: Base64,
 
     /// A map from an algorithm name to a hash of the ciphertext, encoded as unpadded base64.
     ///
     /// Clients should support the SHA-256 hash, which uses the key sha256.
+    #[ts(type = "Record<string, string>")]
     pub hashes: BTreeMap<String, Base64>,
 
     /// Version of the encrypted attachments protocol.
@@ -226,7 +238,7 @@ impl From<EncryptedFileInit> for EncryptedFile {
 ///
 /// To create an instance of this type, first create a `JsonWebKeyInit` and convert it via
 /// `JsonWebKey::from` / `.into()`.
-#[derive(Clone, Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize, TS)]
 #[cfg_attr(not(ruma_unstable_exhaustive_types), non_exhaustive)]
 pub struct JsonWebKey {
     /// Key type.
@@ -245,6 +257,7 @@ pub struct JsonWebKey {
     pub alg: String,
 
     /// The key, encoded as url-safe unpadded base64.
+    #[ts(type = "string")]
     pub k: Base64<UrlSafe>,
 
     /// Extractable.

@@ -1,13 +1,15 @@
 use std::borrow::Cow;
 
 use ruma_common::serde::JsonObject;
+use ts_rs::TS;
 
 use crate::relation::{CustomRelation, InReplyTo, RelationType, Replacement, Thread};
 
 /// Message event relationship.
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, TS)]
 #[allow(clippy::manual_non_exhaustive)]
 #[cfg_attr(not(ruma_unstable_exhaustive_types), non_exhaustive)]
+#[ts(export)]
 pub enum Relation<C> {
     /// An `m.in_reply_to` relation indicating that the event is a reply to another event.
     Reply {
@@ -22,6 +24,7 @@ pub enum Relation<C> {
     Thread(Thread),
 
     #[doc(hidden)]
+    #[ts(skip)]
     _Custom(CustomRelation),
 }
 

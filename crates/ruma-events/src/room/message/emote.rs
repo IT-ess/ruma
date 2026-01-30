@@ -1,9 +1,10 @@
 use serde::{Deserialize, Serialize};
+use ts_rs::TS;
 
 use super::FormattedBody;
 
 /// The payload for an emote message.
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, TS)]
 #[cfg_attr(not(ruma_unstable_exhaustive_types), non_exhaustive)]
 pub struct EmoteMessageEventContent {
     /// The emote action to perform.
@@ -11,6 +12,7 @@ pub struct EmoteMessageEventContent {
 
     /// Formatted form of the message `body`.
     #[serde(flatten)]
+    #[ts(skip)] // We rely on manual typings for this one
     pub formatted: Option<FormattedBody>,
 }
 

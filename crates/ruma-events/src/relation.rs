@@ -10,6 +10,7 @@ use ruma_common::{
     serde::{JsonObject, Raw, StringEnum},
 };
 use serde::{Deserialize, Serialize};
+use ts_rs::TS;
 
 use crate::{AnySyncMessageLikeEvent, PrivOwnedStr};
 
@@ -18,7 +19,7 @@ mod rel_serde;
 /// Information about the event a [rich reply] is replying to.
 ///
 /// [rich reply]: https://spec.matrix.org/latest/client-server-api/#rich-replies
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, TS)]
 #[cfg_attr(not(ruma_unstable_exhaustive_types), non_exhaustive)]
 pub struct InReplyTo {
     /// The event being replied to.
@@ -61,7 +62,7 @@ impl Annotation {
 /// The content of a [replacement] relation.
 ///
 /// [replacement]: https://spec.matrix.org/latest/client-server-api/#event-replacements
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, TS)]
 #[cfg_attr(not(ruma_unstable_exhaustive_types), non_exhaustive)]
 pub struct Replacement<C> {
     /// The ID of the event being replaced.
@@ -81,7 +82,7 @@ impl<C> Replacement<C> {
 /// The content of a [thread] relation.
 ///
 /// [thread]: https://spec.matrix.org/latest/client-server-api/#threading
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, TS)]
 #[cfg_attr(not(ruma_unstable_exhaustive_types), non_exhaustive)]
 #[serde(tag = "rel_type", rename = "m.thread")]
 pub struct Thread {

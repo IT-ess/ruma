@@ -5,6 +5,7 @@ use ruma_common::OwnedMxcUri;
 #[cfg(feature = "unstable-msc2448")]
 use ruma_common::serde::Base64;
 use serde::{Deserialize, Serialize};
+use ts_rs::TS;
 
 use super::FormattedBody;
 use crate::room::{
@@ -13,7 +14,7 @@ use crate::room::{
 };
 
 /// The payload for a video message.
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, TS)]
 #[cfg_attr(not(ruma_unstable_exhaustive_types), non_exhaustive)]
 pub struct VideoMessageEventContent {
     /// A description of the video.
@@ -26,6 +27,8 @@ pub struct VideoMessageEventContent {
     ///
     /// This should only be set if the body represents a caption.
     #[serde(flatten)]
+    // We skip TS type generation for now since it cannot reconcile the two "bodies".
+    #[ts(skip)]
     pub formatted: Option<FormattedBody>,
 
     /// The original filename of the uploaded file as deserialized from the event.
@@ -95,7 +98,7 @@ impl VideoMessageEventContent {
 }
 
 /// Metadata about a video.
-#[derive(Clone, Debug, Default, Deserialize, Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, Serialize, TS)]
 #[cfg_attr(not(ruma_unstable_exhaustive_types), non_exhaustive)]
 pub struct VideoInfo {
     /// The duration of the video in milliseconds.
@@ -104,14 +107,17 @@ pub struct VideoInfo {
         default,
         skip_serializing_if = "Option::is_none"
     )]
+    #[ts(type = "number | null")]
     pub duration: Option<Duration>,
 
     /// The height of the video in pixels.
     #[serde(rename = "h", skip_serializing_if = "Option::is_none")]
+    #[ts(type = "number | null")]
     pub height: Option<UInt>,
 
     /// The width of the video in pixels.
     #[serde(rename = "w", skip_serializing_if = "Option::is_none")]
+    #[ts(type = "number | null")]
     pub width: Option<UInt>,
 
     /// The mimetype of the video, e.g. "video/mp4".
@@ -120,18 +126,20 @@ pub struct VideoInfo {
 
     /// The size of the video in bytes.
     #[serde(skip_serializing_if = "Option::is_none")]
+    #[ts(type = "number | null")]
     pub size: Option<UInt>,
 
     /// Metadata about the image referred to in `thumbnail_source`.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub thumbnail_info: Option<Box<ThumbnailInfo>>,
 
-    /// The source of the thumbnail of the video clip.
+    /// The source of the thumbnail of the video clip. TODO: fix ts(skip)
     #[serde(
         flatten,
         with = "crate::room::thumbnail_source_serde",
         skip_serializing_if = "Option::is_none"
     )]
+    #[ts(skip)]
     pub thumbnail_source: Option<MediaSource>,
 
     /// The [BlurHash](https://blurha.sh) for this video.
@@ -148,6 +156,7 @@ pub struct VideoInfo {
     /// [MSC2448](https://github.com/matrix-org/matrix-spec-proposals/pull/2448).
     #[cfg(feature = "unstable-msc2448")]
     #[serde(rename = "xyz.amorgan.thumbhash", skip_serializing_if = "Option::is_none")]
+    #[ts(type = "string | null")]
     pub thumbhash: Option<Base64>,
 }
 

@@ -1,11 +1,13 @@
 use ruma_common::serde::StringEnum;
 use serde::{Deserialize, Serialize};
+use ts_rs::TS;
 
 use crate::PrivOwnedStr;
 
 /// The payload for a server notice message.
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, TS)]
 #[cfg_attr(not(ruma_unstable_exhaustive_types), non_exhaustive)]
+#[ts(export)]
 pub struct ServerNoticeMessageEventContent {
     /// A human-readable description of the notice.
     pub body: String,
@@ -35,7 +37,7 @@ impl ServerNoticeMessageEventContent {
 
 /// Types of server notices.
 #[doc = include_str!(concat!(env!("CARGO_MANIFEST_DIR"), "/src/doc/string_enum.md"))]
-#[derive(Clone, StringEnum)]
+#[derive(Clone, StringEnum, TS)]
 #[non_exhaustive]
 pub enum ServerNoticeType {
     /// The server has exceeded some limit which requires the server administrator to intervene.
@@ -43,12 +45,13 @@ pub enum ServerNoticeType {
     UsageLimitReached,
 
     #[doc(hidden)]
+    #[ts(skip)]
     _Custom(PrivOwnedStr),
 }
 
 /// Types of usage limits.
 #[doc = include_str!(concat!(env!("CARGO_MANIFEST_DIR"), "/src/doc/string_enum.md"))]
-#[derive(Clone, StringEnum)]
+#[derive(Clone, StringEnum, TS)]
 #[ruma_enum(rename_all = "snake_case")]
 #[non_exhaustive]
 pub enum LimitType {
@@ -59,5 +62,6 @@ pub enum LimitType {
     MonthlyActiveUser,
 
     #[doc(hidden)]
+    #[ts(skip)]
     _Custom(PrivOwnedStr),
 }

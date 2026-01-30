@@ -1,6 +1,7 @@
 #[cfg(feature = "unstable-msc3488")]
 use ruma_common::MilliSecondsSinceUnixEpoch;
 use serde::{Deserialize, Serialize};
+use ts_rs::TS;
 
 use crate::room::{MediaSource, ThumbnailInfo};
 #[cfg(feature = "unstable-msc3488")]
@@ -10,7 +11,7 @@ use crate::{
 };
 
 /// The payload for a location message.
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, TS)]
 #[cfg_attr(not(ruma_unstable_exhaustive_types), non_exhaustive)]
 #[cfg_attr(
     feature = "unstable-msc3488",
@@ -19,6 +20,7 @@ use crate::{
         into = "super::content_serde::msc3488::LocationMessageEventContentSerDeHelper"
     )
 )]
+#[ts(export)]
 pub struct LocationMessageEventContent {
     /// A description of the location e.g. "Big Ben, London, UK", or some kind of content
     /// description for accessibility, e.g. "location attachment".
@@ -29,26 +31,31 @@ pub struct LocationMessageEventContent {
 
     /// Info about the location being represented.
     #[serde(skip_serializing_if = "Option::is_none")]
+    #[ts(skip)]
     pub info: Option<Box<LocationInfo>>,
 
     /// Extensible-event text representation of the message.
     ///
     /// If present, this should be preferred over the `body` field.
     #[cfg(feature = "unstable-msc3488")]
+    #[ts(skip)]
     pub message: Option<TextContentBlock>,
 
     /// Extensible-event location info of the message.
     ///
     /// If present, this should be preferred over the `geo_uri` field.
     #[cfg(feature = "unstable-msc3488")]
+    #[ts(skip)]
     pub location: Option<LocationContent>,
 
     /// Extensible-event asset this message refers to.
     #[cfg(feature = "unstable-msc3488")]
+    #[ts(skip)]
     pub asset: Option<AssetContent>,
 
     /// Extensible-event timestamp this message refers to.
     #[cfg(feature = "unstable-msc3488")]
+    #[ts(type = "number | null")]
     pub ts: Option<MilliSecondsSinceUnixEpoch>,
 }
 

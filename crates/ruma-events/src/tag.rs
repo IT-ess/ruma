@@ -9,6 +9,7 @@ use ruma_common::serde::deserialize_as_optional_number_or_string;
 use ruma_common::serde::deserialize_cow_str;
 use ruma_macros::EventContent;
 use serde::{Deserialize, Serialize};
+use ts_rs::TS;
 
 use crate::PrivOwnedStr;
 
@@ -74,7 +75,7 @@ impl fmt::Display for InvalidUserTagName {
 impl Error for InvalidUserTagName {}
 
 /// The name of a tag.
-#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord, TS)]
 #[cfg_attr(not(ruma_unstable_exhaustive_types), non_exhaustive)]
 pub enum TagName {
     /// `m.favourite`: The user's favorite rooms.
@@ -90,10 +91,12 @@ pub enum TagName {
     ServerNotice,
 
     /// `u.*`: User-defined tag
+    #[ts(type = "string")]
     User(UserTagName),
 
     /// A custom tag
     #[doc(hidden)]
+    #[ts(skip)]
     _Custom(PrivOwnedStr),
 }
 
@@ -166,7 +169,7 @@ impl Serialize for TagName {
 }
 
 /// Information about a tag.
-#[derive(Clone, Debug, Default, PartialEq, Deserialize, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Deserialize, Serialize, TS)]
 #[cfg_attr(not(ruma_unstable_exhaustive_types), non_exhaustive)]
 pub struct TagInfo {
     /// Value to use for lexicographically ordering rooms with this tag.
@@ -178,6 +181,7 @@ pub struct TagInfo {
         feature = "compat-tag-info",
         serde(default, deserialize_with = "deserialize_as_optional_number_or_string")
     )]
+    #[ts(type = "number | null")]
     pub order: Option<f64>,
 }
 

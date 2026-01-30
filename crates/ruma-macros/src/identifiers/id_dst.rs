@@ -472,6 +472,50 @@ impl IdDst {
 
         let to_string_impls = self.expand_to_string_impls(owned_type);
 
+        // TS-RS
+        let skip_ts = ident.eq("KeyId"); // We skip the "KeyId struct"
+        let ts_impl = if skip_ts {
+            quote! {}
+        } else {
+            let name = ident.to_string();
+            let without_generics = if generics.params.is_empty() {
+                quote! { Self }
+            } else {
+                // For generic types, we need to replace generics with dummy types
+                // This is a simplified approach - in practice you might want more sophisticated
+                // handling
+                quote! { #ident<ts_rs::Dummy> }
+            };
+            quote! {
+                #[automatically_derived]
+                impl #impl_generics ts_rs::TS for #owned_type {
+                    type WithoutGenerics = #without_generics;
+                    type OptionInnerType = Self;
+
+                    fn decl() -> String {
+                        format!("type {} = string;", #name)
+                    }
+
+                    fn decl_concrete() -> String {
+                        Self::decl()
+                    }
+
+                    fn name() -> String {
+                        // Kind of hack to get the type directly instead of struct's name
+                        "string".to_string()
+                    }
+
+                    fn inline() -> String {
+                        "string".to_string()
+                    }
+
+                    fn inline_flattened() -> String {
+                        "string".to_string()
+                    }
+                }
+            }
+        };
+
         quote! {
             #[doc = #doc_header]
             ///
@@ -636,6 +680,8 @@ impl IdDst {
                     self.as_str().hash(state)
                 }
             }
+
+            #ts_impl
         }
     }
 

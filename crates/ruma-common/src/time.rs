@@ -3,13 +3,14 @@ use std::fmt;
 use js_int::{UInt, uint};
 use serde::{Deserialize, Serialize};
 use time::OffsetDateTime;
+use ts_rs::TS;
 use web_time::{Duration, SystemTime, UNIX_EPOCH};
 
 /// A timestamp represented as the number of milliseconds since the unix epoch.
-#[derive(Clone, Copy, Hash, PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize)]
+#[derive(Clone, Copy, Hash, PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize, TS)]
 #[allow(clippy::exhaustive_structs)]
 #[serde(transparent)]
-pub struct MilliSecondsSinceUnixEpoch(pub UInt);
+pub struct MilliSecondsSinceUnixEpoch(#[ts(type = "number")] pub UInt);
 
 impl MilliSecondsSinceUnixEpoch {
     /// Creates a new `MilliSecondsSinceUnixEpoch` from the given `SystemTime`, if it is not before
