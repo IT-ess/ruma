@@ -8,6 +8,25 @@ Breaking changes:
   required but it is removed during redaction.
 - The `canonical-json` feature was removed. The code that was behind it is no
   longer gated behind a cargo feature.
+- The `Reply` struct variant of `message::Relation`, `encrypted::Relation` and
+  `RelationWithoutReplacement` is now a tuple variant containing a
+  non-exhaustive struct.
+- The `(Any)FullStateEventContent` enums were renamed to
+  `(Any)StateEventContentChange` to reflect better the purpose of those enums.
+  The method to access `AnyStateEventContentChange` on `Any(Sync)StateEvent` is
+  called `content_change()`.
+- The `content()` method on `Any(Sync)StateEvent` returns an
+  `AnyPossiblyRedactedStateEventContent`.
+- `RequestAction` doesn't implement `(Partial)Eq` and `(Partial)Ord` anymore and
+  its `Request` variant contains a non-exhaustive struct instead of a
+  `SecretName`.
+- `SecretEncryptedData` is now a non-constructible struct rather than an enum,
+  that should always be used as `Raw<SecretEncryptedData>`. Because there is no
+  indicator in the data for which algorithm was used for encrypting it, it won't
+  be possible to determine reliably which algorithm is matched during
+  deserialization when more algorithms are added. This type should be `.cast()`
+  from and to other types when the algorithm is known from external data. The
+  previous `AesHmacSha2EncryptedData` variant is now a separate struct.
 
 Bug fixes:
 
@@ -29,6 +48,9 @@ Improvements:
   variants in `AnyGlobalAccountDataEvent(Content)` are now prefixed with
   `Unstable`. The new `InvitePermissionConfigEventContent` struct uses the new
   format with a `default_action` field instead of `block_all`.
+- Add support for to-device event for pushing secrets, according to MSC4385.
+- Add support for video/audio call intent according to MSC4075 as part of the 
+  `RtcNotificationEventContent` new `call_intent` field.
 
 # 0.32.1
 

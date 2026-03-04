@@ -104,7 +104,10 @@
 
 #![warn(missing_docs)]
 
-use std::{collections::BTreeSet, fmt};
+#[cfg(feature = "unstable-uniffi")]
+uniffi::setup_scaffolding!();
+
+use std::collections::BTreeSet;
 
 use ruma_common::{EventEncryptionAlgorithm, OwnedUserId, room_version_rules::RedactionRules};
 use serde::{Deserialize, Serialize, Serializer, de::IgnoredAny};
@@ -299,15 +302,4 @@ impl Mentions {
     }
 }
 
-// Wrapper around `Box<str>` that cannot be used in a meaningful way outside of
-// this crate. Used for string enums because their `_Custom` variant can't be
-// truly private (only `#[doc(hidden)]`).
-#[doc(hidden)]
-#[derive(Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
-pub struct PrivOwnedStr(Box<str>);
-
-impl fmt::Debug for PrivOwnedStr {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        self.0.fmt(f)
-    }
-}
+ruma_common::priv_owned_str!(uniffi);
