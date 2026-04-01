@@ -41,9 +41,9 @@ pub enum ErrorKind {
     /// [legacy authentication API] in a way that is not supported by the homeserver, because the
     /// server only supports the [OAuth 2.0 API].
     ///
-    /// [`m.login.application_service`]: https://spec.matrix.org/latest/application-service-api/#server-admin-style-permissions
-    /// [legacy authentication API]: https://spec.matrix.org/latest/client-server-api/#legacy-api
-    /// [OAuth 2.0 API]: https://spec.matrix.org/latest/client-server-api/#oauth-20-api
+    /// [`m.login.application_service`]: https://spec.matrix.org/v1.18/application-service-api/#server-admin-style-permissions
+    /// [legacy authentication API]: https://spec.matrix.org/v1.18/client-server-api/#legacy-api
+    /// [OAuth 2.0 API]: https://spec.matrix.org/v1.18/client-server-api/#oauth-20-api
     AppserviceLoginUnsupported,
 
     /// `M_BAD_ALIAS`
@@ -51,7 +51,7 @@ pub enum ErrorKind {
     /// One or more [room aliases] within the `m.room.canonical_alias` event do not point to the
     /// room ID for which the state event is to be sent to.
     ///
-    /// [room aliases]: https://spec.matrix.org/latest/client-server-api/#room-aliases
+    /// [room aliases]: https://spec.matrix.org/v1.18/client-server-api/#room-aliases
     BadAlias,
 
     /// `M_BAD_JSON`
@@ -75,7 +75,7 @@ pub enum ErrorKind {
     ///
     /// The user is unable to reject an invite to join the [server notices] room.
     ///
-    /// [server notices]: https://spec.matrix.org/latest/client-server-api/#server-notices
+    /// [server notices]: https://spec.matrix.org/v1.18/client-server-api/#server-notices
     CannotLeaveServerNoticeRoom,
 
     /// `M_CANNOT_OVERWRITE_MEDIA`
@@ -118,7 +118,7 @@ pub enum ErrorKind {
     ///
     /// The request is an attempt to send a [duplicate annotation].
     ///
-    /// [duplicate annotation]: https://spec.matrix.org/latest/client-server-api/#avoiding-duplicate-annotations
+    /// [duplicate annotation]: https://spec.matrix.org/v1.18/client-server-api/#avoiding-duplicate-annotations
     DuplicateAnnotation,
 
     /// `M_EXCLUSIVE`
@@ -136,7 +136,7 @@ pub enum ErrorKind {
     ///
     /// The room or resource does not permit [guests] to access it.
     ///
-    /// [guests]: https://spec.matrix.org/latest/client-server-api/#guest-access
+    /// [guests]: https://spec.matrix.org/v1.18/client-server-api/#guest-access
     GuestAccessForbidden,
 
     /// `M_INCOMPATIBLE_ROOM_VERSION`
@@ -174,7 +174,7 @@ pub enum ErrorKind {
     /// The request has been refused due to [rate limiting]: too many requests have been sent in a
     /// short period of time.
     ///
-    /// [rate limiting]: https://spec.matrix.org/latest/client-server-api/#rate-limiting
+    /// [rate limiting]: https://spec.matrix.org/v1.18/client-server-api/#rate-limiting
     LimitExceeded(LimitExceededErrorData),
 
     /// `M_MISSING_PARAM`
@@ -186,7 +186,7 @@ pub enum ErrorKind {
     ///
     /// No [access token] was specified for the request, but one is required.
     ///
-    /// [access token]: https://spec.matrix.org/latest/client-server-api/#client-authentication
+    /// [access token]: https://spec.matrix.org/v1.18/client-server-api/#client-authentication
     MissingToken,
 
     /// `M_NOT_FOUND`
@@ -228,7 +228,7 @@ pub enum ErrorKind {
     /// The [room alias] specified in the [`create_room`] request is already taken.
     ///
     /// [`create_room`]: crate::room::create_room
-    /// [room alias]: https://spec.matrix.org/latest/client-server-api/#room-aliases
+    /// [room alias]: https://spec.matrix.org/v1.18/client-server-api/#room-aliases
     RoomInUse,
 
     /// `M_SERVER_NOT_TRUSTED`
@@ -241,7 +241,7 @@ pub enum ErrorKind {
     ///
     /// Authentication could not be performed on the [third-party identifier].
     ///
-    /// [third-party identifier]: https://spec.matrix.org/latest/client-server-api/#adding-account-administrative-contact-information
+    /// [third-party identifier]: https://spec.matrix.org/v1.18/client-server-api/#adding-account-administrative-contact-information
     ThreepidAuthFailed,
 
     /// `M_THREEPID_DENIED`
@@ -249,28 +249,28 @@ pub enum ErrorKind {
     /// The server does not permit this [third-party identifier]. This may happen if the server
     /// only permits, for example, email addresses from a particular domain.
     ///
-    /// [third-party identifier]: https://spec.matrix.org/latest/client-server-api/#adding-account-administrative-contact-information
+    /// [third-party identifier]: https://spec.matrix.org/v1.18/client-server-api/#adding-account-administrative-contact-information
     ThreepidDenied,
 
     /// `M_THREEPID_IN_USE`
     ///
     /// The [third-party identifier] is already in use by another user.
     ///
-    /// [third-party identifier]: https://spec.matrix.org/latest/client-server-api/#adding-account-administrative-contact-information
+    /// [third-party identifier]: https://spec.matrix.org/v1.18/client-server-api/#adding-account-administrative-contact-information
     ThreepidInUse,
 
     /// `M_THREEPID_MEDIUM_NOT_SUPPORTED`
     ///
     /// The homeserver does not support adding a [third-party identifier] of the given medium.
     ///
-    /// [third-party identifier]: https://spec.matrix.org/latest/client-server-api/#adding-account-administrative-contact-information
+    /// [third-party identifier]: https://spec.matrix.org/v1.18/client-server-api/#adding-account-administrative-contact-information
     ThreepidMediumNotSupported,
 
     /// `M_THREEPID_NOT_FOUND`
     ///
     /// No account matching the given [third-party identifier] could be found.
     ///
-    /// [third-party identifier]: https://spec.matrix.org/latest/client-server-api/#adding-account-administrative-contact-information
+    /// [third-party identifier]: https://spec.matrix.org/v1.18/client-server-api/#adding-account-administrative-contact-information
     ThreepidNotFound,
 
     /// `M_TOKEN_INCORRECT`
@@ -289,7 +289,7 @@ pub enum ErrorKind {
     /// This can happen if the homeserver does not know about any of the rooms listed as
     /// conditions, for example.
     ///
-    /// [restricted]: https://spec.matrix.org/latest/client-server-api/#restricted-rooms
+    /// [restricted]: https://spec.matrix.org/v1.18/client-server-api/#restricted-rooms
     UnableToAuthorizeJoin,
 
     /// `M_UNABLE_TO_GRANT_JOIN`
@@ -299,7 +299,7 @@ pub enum ErrorKind {
     /// of [restricted rooms], but the resident server would be unable to meet the authorization
     /// rules.
     ///
-    /// [restricted rooms]: https://spec.matrix.org/latest/client-server-api/#restricted-rooms
+    /// [restricted rooms]: https://spec.matrix.org/v1.18/client-server-api/#restricted-rooms
     UnableToGrantJoin,
 
     /// `M_UNACTIONABLE`
@@ -332,7 +332,7 @@ pub enum ErrorKind {
     ///
     /// The [access or refresh token] specified was not recognized.
     ///
-    /// [access or refresh token]: https://spec.matrix.org/latest/client-server-api/#client-authentication
+    /// [access or refresh token]: https://spec.matrix.org/v1.18/client-server-api/#client-authentication
     UnknownToken(UnknownTokenErrorData),
 
     /// `M_UNRECOGNIZED`
@@ -366,25 +366,33 @@ pub enum ErrorKind {
     /// The desired user ID is already taken.
     UserInUse,
 
+    /// `M_USER_LIMIT_EXCEEDED`
+    ///
+    /// The request cannot be completed because the user has exceeded (or the request would cause
+    /// them to exceed) a limit associated with their account. For example, a user may have reached
+    /// their allocated storage quota, reached a maximum number of allowed rooms, devices, or other
+    /// account-scoped resources, or exceeded usage limits for specific features.
+    UserLimitExceeded(UserLimitExceededErrorData),
+
     /// `M_USER_LOCKED`
     ///
     /// The account has been [locked] and cannot be used at this time.
     ///
-    /// [locked]: https://spec.matrix.org/latest/client-server-api/#account-locking
+    /// [locked]: https://spec.matrix.org/v1.18/client-server-api/#account-locking
     UserLocked,
 
     /// `M_USER_SUSPENDED`
     ///
     /// The account has been [suspended] and can only be used for limited actions at this time.
     ///
-    /// [suspended]: https://spec.matrix.org/latest/client-server-api/#account-suspension
+    /// [suspended]: https://spec.matrix.org/v1.18/client-server-api/#account-suspension
     UserSuspended,
 
     /// `M_WEAK_PASSWORD`
     ///
     /// The password was [rejected] by the server for being too weak.
     ///
-    /// [rejected]: https://spec.matrix.org/latest/client-server-api/#password-management
+    /// [rejected]: https://spec.matrix.org/v1.18/client-server-api/#password-management
     WeakPassword,
 
     /// `M_WRONG_ROOM_KEYS_VERSION`
@@ -392,7 +400,7 @@ pub enum ErrorKind {
     /// The version of the [room keys backup] provided in the request does not match the current
     /// backup version.
     ///
-    /// [room keys backup]: https://spec.matrix.org/latest/client-server-api/#server-side-key-backups
+    /// [room keys backup]: https://spec.matrix.org/v1.18/client-server-api/#server-side-key-backups
     WrongRoomKeysVersion(WrongRoomKeysVersionErrorData),
 
     #[doc(hidden)]
@@ -457,6 +465,7 @@ impl ErrorKind {
             ErrorKind::UrlNotSet => ErrorCode::UrlNotSet,
             ErrorKind::UserDeactivated => ErrorCode::UserDeactivated,
             ErrorKind::UserInUse => ErrorCode::UserInUse,
+            ErrorKind::UserLimitExceeded(_) => ErrorCode::UserLimitExceeded,
             ErrorKind::UserLocked => ErrorCode::UserLocked,
             ErrorKind::UserSuspended => ErrorCode::UserSuspended,
             ErrorKind::WeakPassword => ErrorCode::WeakPassword,
@@ -542,7 +551,7 @@ pub struct UnknownTokenErrorData {
     /// re-authentication but the session is not invalidated. The client can acquire a new
     /// access token by specifying the device ID it is already using to the login API.
     ///
-    /// [soft logout]: https://spec.matrix.org/latest/client-server-api/#soft-logout
+    /// [soft logout]: https://spec.matrix.org/v1.18/client-server-api/#soft-logout
     pub soft_logout: bool,
 }
 
@@ -550,6 +559,33 @@ impl UnknownTokenErrorData {
     /// Construct a new `UnknownTokenErrorData` with `soft_logout` set to `false`.
     pub fn new() -> Self {
         Self::default()
+    }
+}
+
+/// Data for the `M_USER_LIMIT_EXCEEDED` [`ErrorKind`].
+#[derive(Clone, Debug, PartialEq, Eq)]
+#[cfg_attr(not(ruma_unstable_exhaustive_types), non_exhaustive)]
+pub struct UserLimitExceededErrorData {
+    /// A URI that the client can present to the user to provide more context on the encountered
+    /// limit and, if applicable, guidance on how to increase the limit.
+    ///
+    /// The homeserver MAY return different values depending on the type of limit reached.
+    pub info_uri: String,
+
+    /// Whether the specific limit encountered can be increased.
+    ///
+    /// If `true`, it indicates that the specific limit encountered can be increased, for example
+    /// by upgrading the user’s account tier. If `false`, the limit is a hard limit that cannot be
+    /// increased.
+    ///
+    /// Defaults to `false`.
+    pub can_upgrade: bool,
+}
+
+impl UserLimitExceededErrorData {
+    /// Construct a new `UserLimitExceededErrorData` with the given URI.
+    pub fn new(info_uri: String) -> Self {
+        Self { info_uri, can_upgrade: false }
     }
 }
 
@@ -582,7 +618,7 @@ pub struct CustomErrorKind {
 
 /// The possible [error codes] defined in the Matrix spec.
 ///
-/// [error codes]: https://spec.matrix.org/latest/client-server-api/#standard-error-response
+/// [error codes]: https://spec.matrix.org/v1.18/client-server-api/#standard-error-response
 #[derive(Clone, StringEnum)]
 #[non_exhaustive]
 #[ruma_enum(rename_all(prefix = "M_", rule = "SCREAMING_SNAKE_CASE"))]
@@ -594,9 +630,9 @@ pub enum ErrorCode {
     /// [legacy authentication API] in a way that is not supported by the homeserver, because the
     /// server only supports the [OAuth 2.0 API].
     ///
-    /// [`m.login.application_service`]: https://spec.matrix.org/latest/application-service-api/#server-admin-style-permissions
-    /// [legacy authentication API]: https://spec.matrix.org/latest/client-server-api/#legacy-api
-    /// [OAuth 2.0 API]: https://spec.matrix.org/latest/client-server-api/#oauth-20-api
+    /// [`m.login.application_service`]: https://spec.matrix.org/v1.18/application-service-api/#server-admin-style-permissions
+    /// [legacy authentication API]: https://spec.matrix.org/v1.18/client-server-api/#legacy-api
+    /// [OAuth 2.0 API]: https://spec.matrix.org/v1.18/client-server-api/#oauth-20-api
     AppserviceLoginUnsupported,
 
     /// `M_BAD_ALIAS`
@@ -604,7 +640,7 @@ pub enum ErrorCode {
     /// One or more [room aliases] within the `m.room.canonical_alias` event do not point to the
     /// room ID for which the state event is to be sent to.
     ///
-    /// [room aliases]: https://spec.matrix.org/latest/client-server-api/#room-aliases
+    /// [room aliases]: https://spec.matrix.org/v1.18/client-server-api/#room-aliases
     BadAlias,
 
     /// `M_BAD_JSON`
@@ -628,7 +664,7 @@ pub enum ErrorCode {
     ///
     /// The user is unable to reject an invite to join the [server notices] room.
     ///
-    /// [server notices]: https://spec.matrix.org/latest/client-server-api/#server-notices
+    /// [server notices]: https://spec.matrix.org/v1.18/client-server-api/#server-notices
     CannotLeaveServerNoticeRoom,
 
     /// `M_CANNOT_OVERWRITE_MEDIA`
@@ -672,7 +708,7 @@ pub enum ErrorCode {
     ///
     /// The request is an attempt to send a [duplicate annotation].
     ///
-    /// [duplicate annotation]: https://spec.matrix.org/latest/client-server-api/#avoiding-duplicate-annotations
+    /// [duplicate annotation]: https://spec.matrix.org/v1.18/client-server-api/#avoiding-duplicate-annotations
     DuplicateAnnotation,
 
     /// `M_EXCLUSIVE`
@@ -690,7 +726,7 @@ pub enum ErrorCode {
     ///
     /// The room or resource does not permit [guests] to access it.
     ///
-    /// [guests]: https://spec.matrix.org/latest/client-server-api/#guest-access
+    /// [guests]: https://spec.matrix.org/v1.18/client-server-api/#guest-access
     GuestAccessForbidden,
 
     /// `M_INCOMPATIBLE_ROOM_VERSION`
@@ -731,7 +767,7 @@ pub enum ErrorCode {
     /// The request has been refused due to [rate limiting]: too many requests have been sent in a
     /// short period of time.
     ///
-    /// [rate limiting]: https://spec.matrix.org/latest/client-server-api/#rate-limiting
+    /// [rate limiting]: https://spec.matrix.org/v1.18/client-server-api/#rate-limiting
     LimitExceeded,
 
     /// `M_MISSING_PARAM`
@@ -743,7 +779,7 @@ pub enum ErrorCode {
     ///
     /// No [access token] was specified for the request, but one is required.
     ///
-    /// [access token]: https://spec.matrix.org/latest/client-server-api/#client-authentication
+    /// [access token]: https://spec.matrix.org/v1.18/client-server-api/#client-authentication
     MissingToken,
 
     /// `M_NOT_FOUND`
@@ -786,7 +822,7 @@ pub enum ErrorCode {
     /// The [room alias] specified in the [`create_room`] request is already taken.
     ///
     /// [`create_room`]: crate::room::create_room
-    /// [room alias]: https://spec.matrix.org/latest/client-server-api/#room-aliases
+    /// [room alias]: https://spec.matrix.org/v1.18/client-server-api/#room-aliases
     RoomInUse,
 
     /// `M_SERVER_NOT_TRUSTED`
@@ -799,7 +835,7 @@ pub enum ErrorCode {
     ///
     /// Authentication could not be performed on the [third-party identifier].
     ///
-    /// [third-party identifier]: https://spec.matrix.org/latest/client-server-api/#adding-account-administrative-contact-information
+    /// [third-party identifier]: https://spec.matrix.org/v1.18/client-server-api/#adding-account-administrative-contact-information
     ThreepidAuthFailed,
 
     /// `M_THREEPID_DENIED`
@@ -807,28 +843,28 @@ pub enum ErrorCode {
     /// The server does not permit this [third-party identifier]. This may happen if the server
     /// only permits, for example, email addresses from a particular domain.
     ///
-    /// [third-party identifier]: https://spec.matrix.org/latest/client-server-api/#adding-account-administrative-contact-information
+    /// [third-party identifier]: https://spec.matrix.org/v1.18/client-server-api/#adding-account-administrative-contact-information
     ThreepidDenied,
 
     /// `M_THREEPID_IN_USE`
     ///
     /// The [third-party identifier] is already in use by another user.
     ///
-    /// [third-party identifier]: https://spec.matrix.org/latest/client-server-api/#adding-account-administrative-contact-information
+    /// [third-party identifier]: https://spec.matrix.org/v1.18/client-server-api/#adding-account-administrative-contact-information
     ThreepidInUse,
 
     /// `M_THREEPID_MEDIUM_NOT_SUPPORTED`
     ///
     /// The homeserver does not support adding a [third-party identifier] of the given medium.
     ///
-    /// [third-party identifier]: https://spec.matrix.org/latest/client-server-api/#adding-account-administrative-contact-information
+    /// [third-party identifier]: https://spec.matrix.org/v1.18/client-server-api/#adding-account-administrative-contact-information
     ThreepidMediumNotSupported,
 
     /// `M_THREEPID_NOT_FOUND`
     ///
     /// No account matching the given [third-party identifier] could be found.
     ///
-    /// [third-party identifier]: https://spec.matrix.org/latest/client-server-api/#adding-account-administrative-contact-information
+    /// [third-party identifier]: https://spec.matrix.org/v1.18/client-server-api/#adding-account-administrative-contact-information
     ThreepidNotFound,
 
     /// `M_TOKEN_INCORRECT`
@@ -847,7 +883,7 @@ pub enum ErrorCode {
     /// This can happen if the homeserver does not know about any of the rooms listed as
     /// conditions, for example.
     ///
-    /// [restricted]: https://spec.matrix.org/latest/client-server-api/#restricted-rooms
+    /// [restricted]: https://spec.matrix.org/v1.18/client-server-api/#restricted-rooms
     #[ruma_enum(rename = "M_UNABLE_TO_AUTHORISE_JOIN")]
     UnableToAuthorizeJoin,
 
@@ -858,7 +894,7 @@ pub enum ErrorCode {
     /// of [restricted rooms], but the resident server would be unable to meet the authorization
     /// rules.
     ///
-    /// [restricted rooms]: https://spec.matrix.org/latest/client-server-api/#restricted-rooms
+    /// [restricted rooms]: https://spec.matrix.org/v1.18/client-server-api/#restricted-rooms
     UnableToGrantJoin,
 
     /// `M_UNACTIONABLE`
@@ -891,7 +927,7 @@ pub enum ErrorCode {
     ///
     /// The [access or refresh token] specified was not recognized.
     ///
-    /// [access or refresh token]: https://spec.matrix.org/latest/client-server-api/#client-authentication
+    /// [access or refresh token]: https://spec.matrix.org/v1.18/client-server-api/#client-authentication
     UnknownToken,
 
     /// `M_UNRECOGNIZED`
@@ -921,25 +957,33 @@ pub enum ErrorCode {
     /// The desired user ID is already taken.
     UserInUse,
 
+    /// `M_USER_LIMIT_EXCEEDED`
+    ///
+    /// The request cannot be completed because the user has exceeded (or the request would cause
+    /// them to exceed) a limit associated with their account. For example, a user may have reached
+    /// their allocated storage quota, reached a maximum number of allowed rooms, devices, or other
+    /// account-scoped resources, or exceeded usage limits for specific features.
+    UserLimitExceeded,
+
     /// `M_USER_LOCKED`
     ///
     /// The account has been [locked] and cannot be used at this time.
     ///
-    /// [locked]: https://spec.matrix.org/latest/client-server-api/#account-locking
+    /// [locked]: https://spec.matrix.org/v1.18/client-server-api/#account-locking
     UserLocked,
 
     /// `M_USER_SUSPENDED`
     ///
     /// The account has been [suspended] and can only be used for limited actions at this time.
     ///
-    /// [suspended]: https://spec.matrix.org/latest/client-server-api/#account-suspension
+    /// [suspended]: https://spec.matrix.org/v1.18/client-server-api/#account-suspension
     UserSuspended,
 
     /// `M_WEAK_PASSWORD`
     ///
     /// The password was [rejected] by the server for being too weak.
     ///
-    /// [rejected]: https://spec.matrix.org/latest/client-server-api/#password-management
+    /// [rejected]: https://spec.matrix.org/v1.18/client-server-api/#password-management
     WeakPassword,
 
     /// `M_WRONG_ROOM_KEYS_VERSION`
@@ -947,7 +991,7 @@ pub enum ErrorCode {
     /// The version of the [room keys backup] provided in the request does not match the current
     /// backup version.
     ///
-    /// [room keys backup]: https://spec.matrix.org/latest/client-server-api/#server-side-key-backups
+    /// [room keys backup]: https://spec.matrix.org/v1.18/client-server-api/#server-side-key-backups
     WrongRoomKeysVersion,
 
     #[doc(hidden)]
@@ -1166,7 +1210,7 @@ impl FromHttpResponseErrorExt for FromHttpResponseError<Error> {
 
 #[cfg(test)]
 mod tests {
-    use assert_matches2::assert_matches;
+    use assert_matches2::assert_let;
     use ruma_common::api::{EndpointError, OutgoingResponse};
     use serde_json::{
         Value as JsonValue, from_slice as from_json_slice, from_value as from_json_value, json,
@@ -1199,9 +1243,9 @@ mod tests {
         }))
         .expect("We should be able to deserialize a wrong room keys version error");
 
-        assert_matches!(
-            deserialized.kind,
-            ErrorKind::WrongRoomKeysVersion(WrongRoomKeysVersionErrorData { current_version })
+        assert_let!(
+            ErrorKind::WrongRoomKeysVersion(WrongRoomKeysVersionErrorData { current_version }) =
+                deserialized.kind
         );
         assert_eq!(current_version, "42");
         assert_eq!(deserialized.message, "Wrong backup version.");
@@ -1222,12 +1266,11 @@ mod tests {
         let error = Error::from_http_response(response);
 
         assert_eq!(error.status_code, http::StatusCode::TOO_MANY_REQUESTS);
-        assert_matches!(
-            error.body,
+        assert_let!(
             ErrorBody::Standard(StandardErrorBody {
                 kind: ErrorKind::LimitExceeded(LimitExceededErrorData { retry_after: None }),
                 message
-            })
+            }) = error.body
         );
         assert_eq!(message, "Too many requests");
     }
@@ -1248,16 +1291,15 @@ mod tests {
         let error = Error::from_http_response(response);
 
         assert_eq!(error.status_code, http::StatusCode::TOO_MANY_REQUESTS);
-        assert_matches!(
-            error.body,
+        assert_let!(
             ErrorBody::Standard(StandardErrorBody {
                 kind: ErrorKind::LimitExceeded(LimitExceededErrorData {
                     retry_after: Some(retry_after)
                 }),
                 message
-            })
+            }) = error.body
         );
-        assert_matches!(retry_after, RetryAfter::Delay(delay));
+        assert_let!(RetryAfter::Delay(delay) = retry_after);
         assert_eq!(delay.as_millis(), 2000);
         assert_eq!(message, "Too many requests");
     }
@@ -1278,16 +1320,15 @@ mod tests {
         let error = Error::from_http_response(response);
 
         assert_eq!(error.status_code, http::StatusCode::TOO_MANY_REQUESTS);
-        assert_matches!(
-            error.body,
+        assert_let!(
             ErrorBody::Standard(StandardErrorBody {
                 kind: ErrorKind::LimitExceeded(LimitExceededErrorData {
                     retry_after: Some(retry_after)
                 }),
                 message
-            })
+            }) = error.body
         );
-        assert_matches!(retry_after, RetryAfter::Delay(delay));
+        assert_let!(RetryAfter::Delay(delay) = retry_after);
         assert_eq!(delay.as_millis(), 2000);
         assert_eq!(message, "Too many requests");
     }
@@ -1308,16 +1349,15 @@ mod tests {
         let error = Error::from_http_response(response);
 
         assert_eq!(error.status_code, http::StatusCode::TOO_MANY_REQUESTS);
-        assert_matches!(
-            error.body,
+        assert_let!(
             ErrorBody::Standard(StandardErrorBody {
                 kind: ErrorKind::LimitExceeded(LimitExceededErrorData {
                     retry_after: Some(retry_after)
                 }),
                 message
-            })
+            }) = error.body
         );
-        assert_matches!(retry_after, RetryAfter::DateTime(time));
+        assert_let!(RetryAfter::DateTime(time) = retry_after);
         assert_eq!(time.duration_since(UNIX_EPOCH).unwrap().as_secs(), 1_431_704_061);
         assert_eq!(message, "Too many requests");
     }
@@ -1339,16 +1379,15 @@ mod tests {
         let error = Error::from_http_response(response);
 
         assert_eq!(error.status_code, http::StatusCode::TOO_MANY_REQUESTS);
-        assert_matches!(
-            error.body,
+        assert_let!(
             ErrorBody::Standard(StandardErrorBody {
                 kind: ErrorKind::LimitExceeded(LimitExceededErrorData {
                     retry_after: Some(retry_after)
                 }),
                 message
-            })
+            }) = error.body
         );
-        assert_matches!(retry_after, RetryAfter::Delay(delay));
+        assert_let!(RetryAfter::Delay(delay) = retry_after);
         assert_eq!(delay.as_millis(), 2000);
         assert_eq!(message, "Too many requests");
     }
@@ -1471,8 +1510,8 @@ mod tests {
         .unwrap();
 
         assert_eq!(deserialized.kind.errcode().as_str(), "LOCAL_DEV_ERROR");
-        assert_matches!(deserialized.kind.custom_json_data(), Some(json_data));
-        assert_matches!(json_data.get("foo"), Some(JsonValue::String(foo)));
+        let json_data = deserialized.kind.custom_json_data().unwrap();
+        assert_let!(Some(JsonValue::String(foo)) = json_data.get("foo"));
         assert_eq!(foo, "bar");
         assert_eq!(deserialized.message, "You are using the homeserver in local dev mode.");
     }

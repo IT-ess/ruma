@@ -5,15 +5,14 @@
 pub mod v3 {
     //! `/v3/` ([spec])
     //!
-    //! [spec]: https://spec.matrix.org/latest/client-server-api/#delete_matrixclientv3profileuseridkeyname
+    //! [spec]: https://spec.matrix.org/v1.18/client-server-api/#delete_matrixclientv3profileuseridkeyname
 
     use ruma_common::{
         OwnedUserId,
         api::{auth_scheme::AccessToken, request, response},
         metadata,
+        profile::ProfileFieldName,
     };
-
-    use crate::profile::ProfileFieldName;
 
     metadata! {
         method: DELETE,

@@ -20,6 +20,23 @@ Breaking changes:
   tokens for APIs that don't use them as a form of authentication. The new
   `NoAccessToken` authentication scheme should be used instead for APIs that
   rely on access tokens as a form of authentication.
+- It is no longer possible to construct custom `Action` types directly through
+  the hidden `_Custom` variant. They should be constructed with `Action::new()`
+  and their data should be accessed with `Action::custom_data()`.
+- The `Tweak` type uses stronger enum types for its variants, and the `Custom`
+  variant is now hidden and cannot be constructed directly. It should be
+  constructed with `Tweak::new()` and its data should be accessed with
+  `Tweak::set_tweak()` and `Tweak::custom_value()`.
+- The struct variants of `PushCondition` are now tuple variants containing a
+  non-exhaustive struct.
+- `JsonType` was renamed to `CanonicalJsonType` to reflect that it only
+  represents the possible types of a `CanonicalJsonValue`. It can also be
+  accessed with `CanonicalJsonValue::json_type()`.
+- Refactor and improve the variants of `RedactionError`:
+  - `NotOfType` was renamed to `InvalidType` and provides more details about the
+    invalid field.
+  - `JsonFieldMissingFromObject` was renamed to `MissingField` an provides the
+    full path of the missing field.
 
 Improvements:
 
@@ -29,11 +46,11 @@ Improvements:
   `to_canonical_value()`.
 - Add the `assert_to_canonical_json_eq!` macro that can be used in tests to
   check the canonical JSON serialization of a type against its expected value.
-- Add crate-internal into_raw() / from_raw() helpers for IdDst owned IDs and
-  use them in OwnedRoomId / OwnedRoomAliasId <-> OwnedRoomOrAliasId
+- Add crate-internal `into_raw()` / `from_raw()` helpers for `IdDst` owned IDs
+  and use them in `OwnedRoomId` / `OwnedRoomAliasId` <-> `OwnedRoomOrAliasId`
   conversions.
-- Use raw ownership transfer for conversions from OwnedDeviceId and
-  OwnedBase64PublicKey to OwnedBase64PublicKeyOrDeviceId.
+- Use raw ownership transfer for conversions from `OwnedDeviceId` and
+  `OwnedBase64PublicKey` to `OwnedBase64PublicKeyOrDeviceId`.
 - Identifier types implement `(Try)From<Box<str>>`, `(Try)From<Cow<'a, str>>`
   and `PartialEq<Cow<'a, str>>` and conversions between owned types try not to
   reallocate when possible.
@@ -41,6 +58,13 @@ Improvements:
   on the event reference hash.
 - Add `RoomType::Call` & `RoomTypeFilter::Call` to support MSC3417 behind
   `unstable-msc3417`
+- It is now possible to use `Base64::parse` when the inner `B` "bytes" type is
+  an array, and the inner bytes can be accessed without consuming the wrapper
+  type with `Base64::as_inner()`.
+- Add `MatrixVersion::V1_18`.
+- `CanonicalJsonValue::json_type()` allows to get the `JsonType` of a value.
+- Add `FeatureFlag::Msc4323`, the unstable feature flag for the user suspension
+  and locking endpoints, according to MSC4323.
 
 # 0.17.1
 

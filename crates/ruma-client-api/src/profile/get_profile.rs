@@ -5,7 +5,7 @@
 pub mod v3 {
     //! `/v3/` ([spec])
     //!
-    //! [spec]: https://spec.matrix.org/latest/client-server-api/#get_matrixclientv3profileuserid
+    //! [spec]: https://spec.matrix.org/v1.18/client-server-api/#get_matrixclientv3profileuserid
 
     use std::collections::{BTreeMap, btree_map};
 
@@ -13,10 +13,11 @@ pub mod v3 {
         OwnedUserId,
         api::{auth_scheme::NoAccessToken, request, response},
         metadata,
+        profile::{ProfileFieldName, ProfileFieldValue},
     };
     use serde_json::Value as JsonValue;
 
-    use crate::profile::{ProfileFieldName, ProfileFieldValue, StaticProfileField};
+    use crate::profile::StaticProfileField;
 
     metadata! {
         method: GET,
@@ -58,7 +59,7 @@ pub mod v3 {
             Self::default()
         }
 
-        /// Returns the value of the given capability.
+        /// Returns the value of the given profile field.
         pub fn get(&self, field: &str) -> Option<&JsonValue> {
             self.data.get(field)
         }
@@ -142,10 +143,8 @@ mod tests {
     #[test]
     #[cfg(feature = "server")]
     fn serialize_response() {
-        use ruma_common::{api::OutgoingResponse, owned_mxc_uri};
+        use ruma_common::{api::OutgoingResponse, owned_mxc_uri, profile::ProfileFieldValue};
         use serde_json::{Value as JsonValue, from_slice as from_json_slice};
-
-        use crate::profile::ProfileFieldValue;
 
         let response = [
             ProfileFieldValue::AvatarUrl(owned_mxc_uri!("mxc://localhost/abcdef")),
