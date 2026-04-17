@@ -26,7 +26,7 @@ pub mod v3 {
     }
 
     /// Request type for the `delete_3pid` endpoint.
-    #[request(error = crate::Error)]
+    #[request]
     pub struct Request {
         /// Identity server to delete from.
         #[serde(skip_serializing_if = "Option::is_none")]
@@ -40,7 +40,7 @@ pub mod v3 {
     }
 
     /// Response type for the `delete_3pid` endpoint.
-    #[response(error = crate::Error)]
+    #[response]
     pub struct Response {
         /// Result of unbind operation.
         pub id_server_unbind_result: ThirdPartyIdRemovalStatus,
@@ -50,6 +50,13 @@ pub mod v3 {
         /// Creates a new `Request` with the given medium and address.
         pub fn new(medium: Medium, address: String) -> Self {
             Self { id_server: None, medium, address }
+        }
+    }
+
+    impl Response {
+        /// Creates a new `Response` with the given unbind result.
+        pub fn new(id_server_unbind_result: ThirdPartyIdRemovalStatus) -> Self {
+            Self { id_server_unbind_result }
         }
     }
 }

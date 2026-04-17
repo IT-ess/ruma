@@ -80,10 +80,10 @@ fn try_into_multipart_mixed_response<T: Default + bytes::BufMut>(
 ) -> Result<http::Response<T>, ruma_common::api::error::IntoHttpError> {
     use std::io::Write as _;
 
-    use rand::Rng as _;
+    use rand::RngExt as _;
 
-    let boundary = rand::thread_rng()
-        .sample_iter(&rand::distributions::Alphanumeric)
+    let boundary = rand::rng()
+        .sample_iter(&rand::distr::Alphanumeric)
         .map(char::from)
         .take(GENERATED_BOUNDARY_LENGTH)
         .collect::<String>();
@@ -148,7 +148,7 @@ fn try_from_multipart_mixed_response<T: AsRef<[u8]>>(
     http_response: http::Response<T>,
 ) -> Result<
     (ContentMetadata, FileOrLocation),
-    ruma_common::api::error::FromHttpResponseError<ruma_common::api::error::MatrixError>,
+    ruma_common::api::error::FromHttpResponseError<ruma_common::api::error::Error>,
 > {
     use ruma_common::api::error::{HeaderDeserializationError, MultipartMixedDeserializationError};
 

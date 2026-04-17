@@ -1,31 +1,23 @@
-//! Public and private key pairs.
+//! Types for the `ed25519` signing algorithm.
 
-use std::{
-    collections::BTreeMap,
-    fmt::{Debug, Formatter, Result as FmtResult},
+use std::fmt;
+
+use ed25519_dalek::{
+    PUBLIC_KEY_LENGTH, SecretKey, Signer, SigningKey, Verifier as _,
+    VerifyingKey as Ed25519VerifyingKey, ed25519::Signature as Ed25519Signature,
+    pkcs8::ALGORITHM_OID,
 };
-
-use ed25519_dalek::{PUBLIC_KEY_LENGTH, SecretKey, Signer, SigningKey, pkcs8::ALGORITHM_OID};
 use pkcs8::{
     DecodePrivateKey, EncodePrivateKey, ObjectIdentifier, PrivateKeyInfo, der::zeroize::Zeroizing,
 };
-use ruma_common::{SigningKeyAlgorithm, SigningKeyId, serde::Base64};
+use rand::TryCryptoRng;
+use ruma_common::{SigningKeyAlgorithm, SigningKeyId};
 use thiserror::Error;
 
-use crate::signatures::Signature;
+use crate::{KeyPair, Signature, verify::Verifier};
 
 #[cfg(feature = "ring-compat")]
 mod compat;
-
-/// A cryptographic key pair for digitally signing data.
-pub trait KeyPair: Sized {
-    /// Signs a JSON object.
-    ///
-    /// # Parameters
-    ///
-    /// * `message`: An arbitrary series of bytes to sign.
-    fn sign(&self, message: &[u8]) -> Signature;
-}
 
 /// An Ed25519 key pair.
 pub struct Ed25519KeyPair {
@@ -143,12 +135,12 @@ impl Ed25519KeyPair {
     ///
     /// Returns a `Vec<u8>` representing a DER-encoded PKCS#8 v2 document (with public key).
     ///
-    /// # Errors
+    /// # Panics
     ///
-    /// Returns an error if the generation failed.
-    pub fn generate() -> Result<Zeroizing<Vec<u8>>, Ed25519KeyPairParseError> {
-        let signing_key = SigningKey::generate(&mut rand::rngs::OsRng);
-        Ok(signing_key.to_pkcs8_der()?.to_bytes())
+    /// Panics if the system RNG returns an error.
+    pub fn generate() -> Zeroizing<Vec<u8>> {
+        let signing_key = generate_signing_key(&mut rand::rngs::SysRng).unwrap();
+        signing_key.to_pkcs8_der().unwrap().to_bytes()
     }
 
     /// Returns the version string for this keypair.
@@ -160,6 +152,14 @@ impl Ed25519KeyPair {
     pub fn public_key(&self) -> [u8; PUBLIC_KEY_LENGTH] {
         self.signing_key.verifying_key().to_bytes()
     }
+}
+
+// Copy of SigningKey::generate, updated to use `TryCryptoRng`
+// from current rand instead of the old `CryptoRngCore`.
+fn generate_signing_key<R: TryCryptoRng + ?Sized>(csprng: &mut R) -> Result<SigningKey, R::Error> {
+    let mut secret = SecretKey::default();
+    csprng.try_fill_bytes(&mut secret)?;
+    Ok(SigningKey::from_bytes(&secret))
 }
 
 impl KeyPair for Ed25519KeyPair {
@@ -174,8 +174,8 @@ impl KeyPair for Ed25519KeyPair {
     }
 }
 
-impl Debug for Ed25519KeyPair {
-    fn fmt(&self, formatter: &mut Formatter<'_>) -> FmtResult {
+impl fmt::Debug for Ed25519KeyPair {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
         formatter
             .debug_struct("Ed25519KeyPair")
             .field("verifying_key", &self.signing_key.verifying_key().as_bytes())
@@ -226,15 +226,56 @@ pub enum Ed25519KeyPairParseError {
     Pkcs8(#[from] pkcs8::Error),
 }
 
-/// A map from entity names to sets of public keys for that entity.
-///
-/// An entity is generally a homeserver, e.g. `example.com`.
-pub type PublicKeyMap = BTreeMap<String, PublicKeySet>;
+/// A verifier for Ed25519 digital signatures.
+#[derive(Debug, Default)]
+pub(crate) struct Ed25519Verifier;
 
-/// A set of public keys for a single homeserver.
-///
-/// This is represented as a map from key ID to base64-encoded signature.
-pub type PublicKeySet = BTreeMap<String, Base64>;
+impl Verifier for Ed25519Verifier {
+    type Error = Ed25519VerificationError;
+
+    fn verify_json(
+        &self,
+        public_key: &[u8],
+        signature: &[u8],
+        message: &[u8],
+    ) -> Result<(), Self::Error> {
+        Ed25519VerifyingKey::try_from(public_key)
+            .map_err(Ed25519VerificationError::InvalidPublicKey)?
+            .verify(
+                message,
+                &Ed25519Signature::from_bytes(&signature.try_into().map_err(|_| {
+                    Ed25519VerificationError::InvalidSignatureLength {
+                        expected: Ed25519Signature::BYTE_SIZE,
+                        found: signature.len(),
+                    }
+                })?),
+            )
+            .map_err(Ed25519VerificationError::SignatureVerification)
+    }
+}
+
+/// Errors relating to the verification of ed25519 signatures.
+#[derive(Debug, Error)]
+#[non_exhaustive]
+pub enum Ed25519VerificationError {
+    /// The provided ed25519 public key is invalid.
+    #[error("Invalid ed25519 public key: {0}")]
+    InvalidPublicKey(#[source] ed25519_dalek::SignatureError),
+
+    /// The provided signature has an invalid length.
+    #[error("Invalid ed25519 signature length: expected {expected}, found {found}")]
+    InvalidSignatureLength {
+        /// The expected length of the signature.
+        expected: usize,
+
+        /// The actual length of the signature.
+        found: usize,
+    },
+
+    /// The signature verification failed.
+    #[error("ed25519 signature verification failed: {0}")]
+    SignatureVerification(#[source] ed25519_dalek::SignatureError),
+}
 
 #[cfg(test)]
 mod tests {
@@ -259,7 +300,8 @@ mod tests {
 
     #[test]
     fn generate_key() {
-        Ed25519KeyPair::generate().unwrap();
+        // Should not panic.
+        Ed25519KeyPair::generate();
     }
 
     #[test]
