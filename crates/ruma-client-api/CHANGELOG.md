@@ -2,6 +2,21 @@
 
 ## Unreleased
 
+Improvements:
+
+- Unify `RtcFocusInfo` and `RtcTransport`, and align the field, method
+  and variant names with the "transport" terminology of MSC4195. The
+  LiveKit tag changes from `livekit_multi_sfu` to `livekit` on
+  `/rtc/transports`.
+
+## 0.23.1
+
+Bug fixes:
+
+- Fix the deserialization of `RtcFocusInfo` when used with `#[serde(flatten)]`.
+
+## 0.23.0
+
 Breaking changes:
 
 - The `power_level_content_override` field of `create_room::v3::Request` use a
@@ -95,6 +110,8 @@ Improvements:
   MSC4323 / Matrix 1.18.
 - Add support for reading PGP keys from `.well-known/matrix/support`, according
   to MSC4439.
+- Add support for MSC4293 `redact_events` field to `ban_user::v3::Request` and
+  `kick_user::v3::Request`, gated behind `unstable-msc4293`.
 
 ## 0.22.1
 

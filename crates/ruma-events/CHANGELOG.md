@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.33.0
+
 Breaking changes:
 
 - `PossiblyRedactedRoomMemberEventContent` is no longer a type alias for
@@ -42,13 +44,20 @@ Breaking changes:
 - Remove support for the `m.room.aliases` event type. It was removed from the
   specification in Matrix Client-Server API r0.6.1. `m.room.canonical_alias`
   should be used instead.
+- The `redacted_because` field of `RedactedUnsigned` is now a `Raw<AnyRedactionEvent>`. It is an
+  enum that allows to deserialize other event types than `m.room.redaction`.
+  - Add unstable support for `m.room.member` in `redacted_because`, according to MSC4293.
 
 Bug fixes:
 
 - Fix a double `msgtype` in a `m.location` event.
+- Do not serialize `name` in `SecretStorageKeyEventContent` when its value is `None`.
 
 Improvements:
 
+- Support `m.key_backup` account data from
+  [MSC4287](https://github.com/matrix-org/matrix-spec-proposals/pull/4287)
+  via a `KeyBackupEventContent` struct.
 - Add `AnyPossiblyRedactedStateEventContent`, an enum containing all the
   possibly redacted state event contents.
   - Add `AnyStrippedStateEvent::content()` to access only the content of the
@@ -94,6 +103,8 @@ Improvements:
   according to MSC4230 / Matrix 1.18.
 - Add support for the `m.room.policy` state event, according to MSC4284 / Matrix
   1.18.
+- Add support for MSC4293 `redact_events` field to `RoomMemberEventContent`,
+  gated behind `unstable-msc4293`.
 
 ## 0.32.1
 

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.18.0
+
 Breaking changes:
 
 - The variants of `CanonicalJsonError` variants changed.
@@ -24,11 +26,11 @@ Breaking changes:
   rely on access tokens as a form of authentication.
 - It is no longer possible to construct custom `Action` types directly through
   the hidden `_Custom` variant. They should be constructed with `Action::new()`
-  and their data should be accessed with `Action::custom_data()`.
+  and their data should be accessed with `Action::data()`.
 - The `Tweak` type uses stronger enum types for its variants, and the `Custom`
   variant is now hidden and cannot be constructed directly. It should be
   constructed with `Tweak::new()` and its data should be accessed with
-  `Tweak::set_tweak()` and `Tweak::custom_value()`.
+  `Tweak::set_tweak()` and `Tweak::value()`.
 - The struct variants of `PushCondition` are now tuple variants containing a
   non-exhaustive struct.
 - `JsonType` was renamed to `CanonicalJsonType` to reflect that it only
@@ -76,6 +78,10 @@ Improvements:
   and locking endpoints, according to MSC4323.
 - Add unstable support for MSC4406.
 - Add `rule_type()` and `data()` methods to `AllowRule`.
+- Implement `PartialEq` and `Eq` on `CrossSigningKey` and `Signatures`.
+- Add `Error::is_endpoint_not_implemented()` helper method to check if it
+  matches the expected format for endpoints that are not implemented by the
+  homeserver.
 
 ## 0.17.1
 
