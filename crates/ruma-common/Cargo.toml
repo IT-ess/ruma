@@ -22,7 +22,7 @@ ignored = [
 [features]
 # These feature gates exist only for the tests. Disabling them results in a
 # compile error.
-default = ["client", "server"]
+default = ["client", "server", "unstable-msc4482"]
 client = []
 server = []
 
@@ -47,6 +47,8 @@ unstable-msc4306 = []
 unstable-msc4406 = []
 # User Status Profile Fields.
 unstable-msc4426 = []
+# Bookmarks
+unstable-msc4482 = []
 
 # Allow IDs to exceed 255 bytes.
 compat-arbitrary-length-ids = ["ruma-identifiers-validation/compat-arbitrary-length-ids"]

@@ -14,6 +14,7 @@ rust-version = { workspace = true }
 all-features = true
 
 [features]
+default = ["unstable-msc4482"]
 html = ["dep:ruma-html"]
 markdown = ["dep:pulldown-cmark"]
 unstable-msc1767 = []
@@ -57,6 +58,7 @@ unstable-msc4362 = []
 unstable-msc4380 = []
 unstable-msc4385 = []
 unstable-msc4471 = []
+unstable-msc4482 = ["unstable-msc1767", "ruma-common/unstable-msc4482"]
 unstable-uniffi = ["dep:uniffi"]
 
 # Allow some mandatory fields to be missing, defaulting them to an empty string

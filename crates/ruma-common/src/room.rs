@@ -30,6 +30,15 @@ pub enum RoomType {
     #[ruma_enum(rename = "org.matrix.msc3417.call")]
     Call,
 
+    /// Defines the room as a bookmarks room.
+    /// There should be at most one room of this type active.
+    ///
+    /// This uses the unstable prefix in
+    /// [MSC4482](https://github.com/matrix-org/matrix-spec-proposals/pull/4482)
+    #[cfg(feature = "unstable-msc4482")]
+    #[ruma_enum(rename = "it.refs.msc4482.bookmarks", alias = "m.bookmarks")]
+    Bookmarks,
+
     /// Defines the room as a custom type.
     #[doc(hidden)]
     _Custom(PrivOwnedStr),
