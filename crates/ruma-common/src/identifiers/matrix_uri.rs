@@ -451,7 +451,8 @@ pub struct MatrixUri {
 }
 
 impl MatrixUri {
-    pub(crate) fn new(id: MatrixId, via: Vec<OwnedServerName>, action: Option<UriAction>) -> Self {
+    /// Create a new MatrixUri.
+    pub fn new(id: MatrixId, via: Vec<OwnedServerName>, action: Option<UriAction>) -> Self {
         Self { id, via, action }
     }
 

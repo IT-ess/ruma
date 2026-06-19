@@ -148,6 +148,8 @@ pub mod beacon;
 pub mod beacon_info;
 #[cfg(feature = "unstable-msc4482")]
 pub mod bookmark;
+#[cfg(feature = "unstable-msc4482")]
+pub mod bookmarks_room;
 pub mod call;
 pub mod direct;
 #[cfg(feature = "unstable-msc4359")]

@@ -72,6 +72,9 @@ event_enum! {
         "im.ponies.emote_rooms" => super::image_pack,
         "m.recent_emoji" => super::recent_emoji,
         "m.key_backup" => super::key_backup,
+        #[cfg(feature = "unstable-msc4482")]
+        #[ruma_enum(ident = BookmarksRoom, alias = "m.bookmarks_room")]
+        "it.refs.msc4482.bookmarks_room" => super::bookmarks_room,
     }
 
     /// Any room account data event.
@@ -175,6 +178,9 @@ event_enum! {
         #[cfg(feature = "unstable-msc4310")]
         #[ruma_enum(alias = "m.rtc.decline")]
         "org.matrix.msc4310.rtc.decline" => super::rtc::decline,
+        #[cfg(feature = "unstable-msc4482")]
+        #[ruma_enum(alias = "m.bookmark")]
+        "it.refs.msc4482.bookmark" => super::bookmark,
     }
 
     /// Any state event.
@@ -494,6 +500,8 @@ impl AnyMessageLikeEventContent {
             Self::RtcNotification(ev) => ev.relates_to.clone().map(encrypted::Relation::Reference),
             #[cfg(feature = "unstable-msc4310")]
             Self::RtcDecline(ev) => Some(encrypted::Relation::Reference(ev.relates_to.clone())),
+            #[cfg(feature = "unstable-msc4482")]
+            Self::Bookmark(ev) => ev.relates_to.clone().map(Into::into),
             Self::CallSdpStreamMetadataChanged(_)
             | Self::CallNegotiate(_)
             | Self::CallReject(_)
